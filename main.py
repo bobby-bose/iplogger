@@ -1,14 +1,16 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # enable CORS for all routes
 
-@app.route('/receive', methods=['POST'])
+@app.post("/receive")
 def receive():
-    data = request.get_json()
+    data = request.get_json(silent=True) or {}
     message = data.get("message", "")
     print("Received H1 content:", message)
     return jsonify({"status": f"Message received: {message}"}), 200
 
-if __name__ == "__main__":
-
-    app.run(host="0.0.0.0", port=5000, debug=True)
+@app.get("/")
+def home():
+    return "Flask server is running with CORS enabled."
