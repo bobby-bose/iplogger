@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # enable CORS for all routes
+CORS(app, origins=["https://roaring-travesseiro-ef49de.netlify.app"])
 
 @app.post("/receive")
 def receive():
