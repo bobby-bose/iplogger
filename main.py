@@ -9,5 +9,6 @@ def receive():
     print("Received H1 content:", message)
     return jsonify({"status": f"Message received: {message}"}), 200
 
-if __name__ == '__main__':
-    app.run(debug=True)
+f __name__ == "__main__":
+
+    app.run(host="0.0.0.0", port=5000, debug=True)
