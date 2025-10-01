@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>IP Sender</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    html,body {
+      height:100%;
+      margin:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      font-family:system-ui,Arial,Helvetica,sans-serif;
+    }
+    h1 {
+      font-size:2rem;
+      margin:0 0 1rem 0;
+    }
+    button {
+      padding:0.5rem 1rem;
+      font-size:1rem;
+      border:none;
+      border-radius:6px;
+      background:#007bff;
+      color:white;
+      cursor:pointer;
+    }
+    button:hover {
+      background:#0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="ip">Fetching IP…</h1>
+  <button onclick="sendData()">Send to API</button>
+
+  <script>
+    // Fetch and display IP
+    (async () => {
+      try {
+        const r = await fetch('https://api.ipify.org?format=json', {cache: "no-store"});
+        if (!r.ok) throw new Error('Network error');
+        const j = await r.json();
+        document.getElementById('ip').textContent = j.ip || 'IP not found';
+      } catch (e) {
+        document.getElementById('ip').textContent = 'Unable to fetch IP';
+        console.error(e);
+      }
+    })();
+
+    // Send H1 content (IP) to Flask API
+    function sendData() {
+      const content = document.getElementById("ip").innerText;
+
+      fetch("https://iplogger-sph4.onrender.com/receive", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: content })
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert("Server Response: " + data.status);
+      })
+      .catch(error => console.error("Error:", error));
+    }
+  </script>
+</body>
+</html>
