@@ -70,7 +70,7 @@ def download():
     return send_file(
         IPS_FILE,
         as_attachment=True,
-        attachment_filename="ips.txt",
+        download_name="ips.txt",
         mimetype="text/plain"
     )
 
